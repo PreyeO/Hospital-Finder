@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { GoogleMap, Marker } from "@react-google-maps/api";
-import PlacesAutocomplete, {
+import PlacesAutocomplete from "react-places-autocomplete";
+import {
   geocodeByAddress,
   getLatLng,
   AutocompletePrediction,
@@ -42,7 +43,6 @@ const MapContainer: React.FC = () => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (results) {
           const hospitalResults = results.filter((result) => {
-            // Check if "hospital" is in the types array
             return result.types?.includes("hospital");
           });
           console.log(results);
@@ -72,7 +72,7 @@ const MapContainer: React.FC = () => {
     <div style={{ height: "500px", width: "100%" }}>
       <PlacesAutocomplete
         value={selectedAddress}
-        onChange={setSelectedAddress} // Update the state directly
+        onChange={setSelectedAddress}
         onSelect={handleSelect}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -86,17 +86,17 @@ const MapContainer: React.FC = () => {
             <div>
               {loading && <div>Loading...</div>}
 
-              {suggestions.map((suggestion, index) => {
+              {suggestions.map((suggestion) => {
                 const style = {
                   backgroundColor: suggestion.active ? "#41b6e6" : "#fff",
                 };
+
                 return (
                   <div
-                    key={index} // Use a unique identifier like index
                     {...getSuggestionItemProps({
-                      suggestion,
+                      suggestion: suggestion as any, // Cast suggestion as any
                       style,
-                      onClick: () => handleAutocomplete(suggestion),
+                      onClick: () => handleAutocomplete(suggestion as any), // Cast suggestion as any
                     })}
                   >
                     {suggestion.description}
@@ -124,7 +124,6 @@ const MapContainer: React.FC = () => {
         {hospitals &&
           hospitals.map(
             (hospital) =>
-              // Add null check for hospital.geometry
               hospital.geometry?.location && (
                 <Marker
                   key={hospital.place_id}
