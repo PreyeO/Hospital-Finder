@@ -93,11 +93,9 @@ const MapContainer: React.FC = () => {
 
                 return (
                   <div
-                    {...getSuggestionItemProps({
-                      suggestion: suggestion as any, // Cast suggestion as any
-                      style,
-                      onClick: () => handleAutocomplete(suggestion as any), // Cast suggestion as any
-                    })}
+                    {...getSuggestionItemProps(suggestion)} // Cast suggestion as any
+                    style={style}
+                    onClick={() => handleAutocomplete(suggestion as any)} // Cast suggestion as any
                   >
                     {suggestion.description}
                   </div>
